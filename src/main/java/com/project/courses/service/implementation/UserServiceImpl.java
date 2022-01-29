@@ -77,7 +77,12 @@ public class UserServiceImpl implements UserService {
 		
 		return user;
 	}
-	
-	
 
+	@Override
+	public byte[] getPhotoById(Long id) {
+		User user = this.getById(id);  
+		if (user.getPhoto() == null)
+			throw new ResourceNotFoundException("Photo not found.");
+		return user.getPhoto();		
+	}
 }

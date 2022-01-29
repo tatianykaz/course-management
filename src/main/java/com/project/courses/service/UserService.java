@@ -18,4 +18,6 @@ public interface UserService {
 
 	User updateUserPhotoById(Long id, byte[] photo);
 
+	byte[] getPhotoById(Long id);
+
 }

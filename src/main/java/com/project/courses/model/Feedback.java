@@ -8,6 +8,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.Data;
 
 @Entity
@@ -21,6 +23,7 @@ public class Feedback {
 	
 	@ManyToOne
 	@JoinColumn(name="user_id")
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private User user;
 	
 	private String name;
