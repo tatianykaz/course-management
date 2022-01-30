@@ -22,9 +22,9 @@ public class Feedback {
 	private Long id;
 	
 	@ManyToOne
-	@JoinColumn(name="user_id")
+	@JoinColumn(name="student_id")
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-	private User user;
+	private Student student;
 	
 	private String name;
 	

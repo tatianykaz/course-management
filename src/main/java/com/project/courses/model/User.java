@@ -35,15 +35,9 @@ public class User {
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String password;
 	
-	private String name;
+	private String login;
 	
 	private LocalDate regDate = LocalDate.now();
-	
-	private String address;
-	
-	private String email;
-	
-	private String phone;
 	
 	@Lob
 	private byte[] photo;

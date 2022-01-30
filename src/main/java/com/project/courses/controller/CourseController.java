@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.courses.auth.MyUserDetails;
 import com.project.courses.model.Course;
+import com.project.courses.model.User;
 import com.project.courses.service.CourseService;
 
 @RestController
@@ -30,15 +34,25 @@ public class CourseController {
 		return ResponseEntity.status(HttpStatus.OK).body(courses);
 	}
 	
+	@GetMapping("{id}")
+	public ResponseEntity<Course> getCourseById(@PathVariable Long id){
+		return ResponseEntity.status(HttpStatus.OK).body(courseService.getById(id));
+	}
+	
 	@PostMapping("/new")
 	public ResponseEntity<Course> addCourse(@RequestBody Course course){
 		courseService.saveCourse(course);
 		return ResponseEntity.status(HttpStatus.CREATED).body(course);
 	}
 	
-	@GetMapping("{id}")
-	public ResponseEntity<Course> getCourseById(@PathVariable Long id){
-		return ResponseEntity.status(HttpStatus.OK).body(courseService.getById(id));
+	@PostMapping("/enroll/{id}")
+	public ResponseEntity<Boolean> enroll(@PathVariable Long id){
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
+		User user = ((MyUserDetails)principal).getUser();
+	
+		Boolean enrolled = courseService.enrollUser(id, user);
+		return ResponseEntity.status(HttpStatus.OK).body(enrolled);
 	}
 	
 	@PutMapping("/{id}")

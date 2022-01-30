@@ -5,30 +5,32 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
 
 @Entity
-@Table(name = "contacts")
+@Table(name = "users")
 @Data
-public class Contact {
+public class Employee {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@ManyToOne
-	@JoinColumn(name="student_id")
-	private Student student;
-	
 	private String name;
+	
+	@OneToOne
+	@JoinColumn(name="user_id")
+	private User user;
+	
+	private String address;
 	
 	private String email;
 	
 	private String phone;
 	
-	private String message;
+	private String position;
 
 }

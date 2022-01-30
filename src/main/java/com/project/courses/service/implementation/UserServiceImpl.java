@@ -38,13 +38,8 @@ public class UserServiceImpl implements UserService {
 	public User updateUserById(Long id, User updatedUser) throws ResourceNotFoundException{
 		User user = this.getById(id);
 		
-		if (updatedUser.getName() != null)
-			user.setName(updatedUser.getName());
 		if (updatedUser.getPassword() != null)
 			user.setPassword(updatedUser.getPassword());
-		user.setAddress(updatedUser.getAddress());
-		user.setEmail(updatedUser.getEmail());
-		user.setPhone(updatedUser.getPhone());
 		user.setPhoto(updatedUser.getPhoto());
 		user.setRoles(updatedUser.getRoles());
 		
