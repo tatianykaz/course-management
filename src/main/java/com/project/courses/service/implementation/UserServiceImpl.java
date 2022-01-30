@@ -3,9 +3,11 @@ package com.project.courses.service.implementation;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.project.courses.auth.MyUserDetails;
 import com.project.courses.exceptions.ResourceNotFoundException;
 import com.project.courses.model.User;
 import com.project.courses.repository.UserRepository;
@@ -103,5 +105,11 @@ public class UserServiceImpl implements UserService {
 		user.setPassword(this.encodeUserPassword("abc123"));
 		user.addRole(roleService.getByRoleName(role));
 		return user;		
+	}
+
+	@Override
+	public User getAutheticatedUser() {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return ((MyUserDetails)principal).getUser();
 	}
 }

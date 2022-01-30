@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.project.courses.exceptions.ResourceNotFoundException;
 import com.project.courses.model.Contact;
 import com.project.courses.model.Student;
+import com.project.courses.model.User;
 import com.project.courses.repository.ContactRepository;
 import com.project.courses.service.ContactService;
 import com.project.courses.service.StudentService;
@@ -29,6 +30,15 @@ public class ContactServiceImpl implements ContactService{
 
 	@Override
 	public Contact saveContact(Contact contact) {
+		return contactRepository.save(contact);
+	}
+	
+	@Override
+	public Contact saveContact(Contact contact, User user) {
+		if (contact.getId() == null) {
+			Student student = studentService.getByUser(user);
+			contact.setStudent(student);
+		}
 		return contactRepository.save(contact);
 	}
 

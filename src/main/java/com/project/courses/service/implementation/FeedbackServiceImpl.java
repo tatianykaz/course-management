@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.project.courses.exceptions.ResourceNotFoundException;
 import com.project.courses.model.Feedback;
 import com.project.courses.model.Student;
+import com.project.courses.model.User;
 import com.project.courses.repository.FeedbackRepository;
 import com.project.courses.service.FeedbackService;
 import com.project.courses.service.StudentService;
@@ -27,6 +28,15 @@ public class FeedbackServiceImpl implements FeedbackService {
 		return feedbacks;
 	}
 
+	@Override
+	public Feedback saveFeedback(Feedback feedback, User user) {
+		if (feedback.getId() == null) {
+			Student student = studentService.getByUser(user);
+			feedback.setStudent(student);
+		}
+		return feedbackRepository.save(feedback);
+	}
+	
 	@Override
 	public Feedback saveFeedback(Feedback feedback) {
 		return feedbackRepository.save(feedback);
@@ -72,5 +82,4 @@ public class FeedbackServiceImpl implements FeedbackService {
 		
 		return true;
 	}
-
 }

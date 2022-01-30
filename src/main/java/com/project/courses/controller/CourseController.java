@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.project.courses.auth.MyUserDetails;
 import com.project.courses.model.Course;
 import com.project.courses.model.User;
 import com.project.courses.service.CourseService;
+import com.project.courses.service.UserService;
 
 @RestController
 @RequestMapping("/courses")
@@ -26,6 +25,9 @@ public class CourseController {
 	
 	@Autowired
 	private CourseService courseService;
+	
+	@Autowired
+	private UserService userService;
 	
 	@GetMapping("/all")
 	public ResponseEntity<List<Course>> getCourses(){
@@ -46,10 +48,7 @@ public class CourseController {
 	
 	@PostMapping("/enroll/{id}")
 	public ResponseEntity<Boolean> enroll(@PathVariable Long id){
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		
-		User user = ((MyUserDetails)principal).getUser();
-	
+		User user = userService.getAutheticatedUser();	
 		Boolean enrolled = courseService.enrollStudent(id, user);
 		return ResponseEntity.status(HttpStatus.OK).body(enrolled);
 	}

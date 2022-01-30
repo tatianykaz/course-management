@@ -23,5 +23,7 @@ public interface UserService {
 	String encodeUserPassword(String password);
 	
 	User createUser(String fullname, String role);
+	
+	User getAutheticatedUser();
 
 }

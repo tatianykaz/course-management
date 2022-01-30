@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.courses.model.Feedback;
+import com.project.courses.model.User;
 import com.project.courses.service.FeedbackService;
+import com.project.courses.service.UserService;
 
 @RestController
 @RequestMapping("/feedbacks")
@@ -23,6 +25,9 @@ public class FeedbackController {
 	
 	@Autowired
 	private FeedbackService feedbackService;
+	
+	@Autowired
+	private UserService userService;
 	
 	@GetMapping("/all")
 	public ResponseEntity<List<Feedback>> getFeedbacks(){
@@ -32,7 +37,8 @@ public class FeedbackController {
 	
 	@PostMapping("/new")
 	public ResponseEntity<Feedback> addFeedback(@RequestBody Feedback feedback){
-		feedbackService.saveFeedback(feedback);
+		User user = userService.getAutheticatedUser();
+		feedbackService.saveFeedback(feedback, user);
 		return ResponseEntity.status(HttpStatus.CREATED).body(feedback);
 	}
 	
