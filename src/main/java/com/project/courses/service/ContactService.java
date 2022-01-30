@@ -12,7 +12,7 @@ public interface ContactService {
 
 	Contact getById(Long id);
 	
-	List<Contact> getByUserId(Long userId);
+	List<Contact> getByStudentId(Long studentId);
 
 	Contact updateContactById(Long id, Contact updatedContact);
 

@@ -19,5 +19,9 @@ public interface UserService {
 	User updateUserPhotoById(Long id, byte[] photo);
 
 	byte[] getPhotoById(Long id);
+	
+	String encodeUserPassword(String password);
+	
+	User createUser(String fullname, String role);
 
 }

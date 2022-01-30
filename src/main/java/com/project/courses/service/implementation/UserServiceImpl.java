@@ -3,11 +3,13 @@ package com.project.courses.service.implementation;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.project.courses.exceptions.ResourceNotFoundException;
 import com.project.courses.model.User;
 import com.project.courses.repository.UserRepository;
+import com.project.courses.service.RoleService;
 import com.project.courses.service.UserService;
 
 @Service
@@ -15,6 +17,12 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private RoleService roleService;
 
 	@Override
 	public List<User> getUsers() {
@@ -39,9 +47,7 @@ public class UserServiceImpl implements UserService {
 		User user = this.getById(id);
 		
 		if (updatedUser.getPassword() != null)
-			user.setPassword(updatedUser.getPassword());
-		user.setPhoto(updatedUser.getPhoto());
-		user.setRoles(updatedUser.getRoles());
+			user.setPassword(this.encodeUserPassword(updatedUser.getPassword()));
 		
 		updatedUser = userRepository.save(user);
 		
@@ -52,11 +58,15 @@ public class UserServiceImpl implements UserService {
 	public Boolean deleteUserById(Long id) {
 		
 		User user = this.getById(id);
+		user.getRoles().clear();
 		
-		userRepository.delete(user);
-		
-		if (user == null)
+		try {
+			userRepository.save(user);
+			userRepository.delete(user);
+		}catch(Exception e) {
+			e.printStackTrace();
 			return false;
+		}
 		
 		return true;
 	}
@@ -79,5 +89,19 @@ public class UserServiceImpl implements UserService {
 		if (user.getPhoto() == null)
 			throw new ResourceNotFoundException("Photo not found.");
 		return user.getPhoto();		
+	}
+
+	@Override
+	public String encodeUserPassword(String password) {
+		return passwordEncoder.encode(password);
+	}
+
+	@Override
+	public User createUser(String fullname, String role) {
+		User user = new User();
+		user.setLogin(fullname.split(" ")[0].toLowerCase());
+		user.setPassword(this.encodeUserPassword("abc123"));
+		user.addRole(roleService.getByRoleName(role));
+		return user;		
 	}
 }

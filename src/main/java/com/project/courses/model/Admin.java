@@ -1,6 +1,8 @@
 package com.project.courses.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,9 +13,9 @@ import javax.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "users")
+@Table(name = "admins")
 @Data
-public class Employee {
+public class Admin {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,8 +23,8 @@ public class Employee {
 	
 	private String name;
 	
-	@OneToOne
-	@JoinColumn(name="user_id")
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "user_id")
 	private User user;
 	
 	private String address;

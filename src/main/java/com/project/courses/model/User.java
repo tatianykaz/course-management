@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -16,8 +15,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-
-import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -42,7 +39,7 @@ public class User {
 	@Lob
 	private byte[] photo;
 	
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -50,8 +47,8 @@ public class User {
             )
     private Set<Role> roles = new HashSet<>();
 	
-	public void setPassword(String password) {
-		this.password =  BCrypt.hashpw(password, BCrypt.gensalt());
+	public void addRole(Role role) {
+		this.roles.add(role);
 	}
 
 	@Override

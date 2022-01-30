@@ -3,17 +3,23 @@ package com.project.courses.service.implementation;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.project.courses.exceptions.ResourceNotFoundException;
 import com.project.courses.model.Student;
 import com.project.courses.model.User;
 import com.project.courses.repository.StudentRepository;
 import com.project.courses.service.StudentService;
+import com.project.courses.service.UserService;
 
+@Service
 public class StudentServiceImpl implements StudentService {
 	
 	@Autowired
 	private StudentRepository studentRepository;
+	
+	@Autowired
+	private UserService userService;
 	
 	@Override
 	public List<Student> getStudents() {
@@ -23,7 +29,15 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	public Student saveStudent(Student student) {
+		this.createStudentUser(student);
 		return studentRepository.save(student);
+	}
+	
+	@Override
+	public void createStudentUser(Student student) {
+		if (student.getUser() == null) 
+			student.setUser(userService.createUser(student.getName(), "STUDENT"));
+		
 	}
 
 	@Override
@@ -47,6 +61,8 @@ public class StudentServiceImpl implements StudentService {
 			student.setName(updatedStudent.getName());
 		
 		student.setEmail(updatedStudent.getEmail());
+		student.setAddress(updatedStudent.getAddress());
+		student.setPhone(updatedStudent.getPhone());
 		
 		student = this.saveStudent(student);
 		
@@ -56,13 +72,13 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	public Boolean deleteStudentById(Long id) {
 		Student student = this.getById(id);
-		
-		studentRepository.delete(student);
-		
-		if (student == null)
+
+		try {
+			studentRepository.delete(student);
+		}catch (Exception e) {
+			e.printStackTrace();
 			return false;
-		
+		}
 		return true;
 	}
-
 }

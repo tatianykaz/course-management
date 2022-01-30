@@ -18,4 +18,6 @@ public interface StudentService {
 	Student updateStudentById(Long id, Student updatedStudent);
 
 	Boolean deleteStudentById(Long id);
+
+	void createStudentUser(Student student);
 }

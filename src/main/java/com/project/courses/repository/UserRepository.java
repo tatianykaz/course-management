@@ -10,7 +10,7 @@ import com.project.courses.model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 	
-	@Query("SELECT u FROM User u WHERE u.name = :name")
-    public User getUserByName(@Param("name") String name);
+	@Query("SELECT u FROM User u WHERE u.login = :login")
+    public User getUserByLogin(@Param("login") String login);
 
 }

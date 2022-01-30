@@ -56,6 +56,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     			.authorizeRequests()
     			.antMatchers("/users/all").hasAnyAuthority("ADMIN")
     			.antMatchers("/courses/new").hasAnyAuthority("ADMIN")
+    			.antMatchers("/admin/**").hasAnyAuthority("ADMIN")
+    			.antMatchers("/courses/enroll/**").hasAnyAuthority("STUDENT")
     			.anyRequest().authenticated()
     			.and().httpBasic()
     			.authenticationEntryPoint(authEntryPoint);

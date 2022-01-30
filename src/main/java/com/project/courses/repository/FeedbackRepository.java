@@ -5,10 +5,10 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.project.courses.model.Feedback;
-import com.project.courses.model.User;
+import com.project.courses.model.Student;
 
 public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
 	
-	public List<Feedback> findByUser(User user);
+	public List<Feedback> findByStudent(Student student);
 
 }

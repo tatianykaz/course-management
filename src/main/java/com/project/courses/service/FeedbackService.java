@@ -12,7 +12,7 @@ public interface FeedbackService {
 
 	Feedback getById(Long id);
 	
-	List<Feedback> getByUserId(Long id);
+	List<Feedback> getByStudentId(Long studentId);
 
 	Feedback updateFeedbackById(Long id, Feedback updatedFeedback);
 
