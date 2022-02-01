@@ -39,17 +39,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return authProvider;
     }
  
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//    	PasswordEncoder encoder = passwordEncoder();
-//
-//        auth
-//                .inMemoryAuthentication()
-//                    .withUser("john")
-//                        .password(encoder.encode("abc123"))
-//                        .roles("ADMIN");
-//    }
- 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
     		http
