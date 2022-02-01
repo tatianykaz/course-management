@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.courses.model.Contact;
+import com.project.courses.model.User;
 import com.project.courses.service.ContactService;
+import com.project.courses.service.UserService;
 
 @RestController
 @RequestMapping("/contacts")
@@ -23,6 +25,9 @@ public class ContactController {
 	
 	@Autowired
 	private ContactService contactService;
+	
+	@Autowired
+	private UserService userService;
 	
 	@GetMapping("/all")
 	public ResponseEntity<List<Contact>> getContacts(){
@@ -32,7 +37,8 @@ public class ContactController {
 	
 	@PostMapping("/new")
 	public ResponseEntity<Contact> addContact(@RequestBody Contact contact){
-		contactService.saveContact(contact);
+		User user = userService.getAutheticatedUser();
+		contactService.saveContact(contact, user);
 		return ResponseEntity.status(HttpStatus.CREATED).body(contact);
 	}
 	

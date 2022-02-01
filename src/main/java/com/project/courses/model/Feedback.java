@@ -8,6 +8,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.Data;
 
 @Entity
@@ -20,8 +22,9 @@ public class Feedback {
 	private Long id;
 	
 	@ManyToOne
-	@JoinColumn(name="user_id")
-	private User user;
+	@JoinColumn(name="student_id")
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private Student student;
 	
 	private String name;
 	

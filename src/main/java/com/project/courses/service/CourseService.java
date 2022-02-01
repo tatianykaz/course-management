@@ -3,6 +3,7 @@ package com.project.courses.service;
 import java.util.List;
 
 import com.project.courses.model.Course;
+import com.project.courses.model.User;
 
 public interface CourseService {
 	
@@ -15,4 +16,6 @@ public interface CourseService {
 	Course updateCourseById(Long id, Course updatedCourse);
 
 	Boolean deleteCourseById(Long id);
+
+	Boolean enrollStudent(Long idCourse, User user);
 }
