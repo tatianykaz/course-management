@@ -1,5 +1,6 @@
 package com.project.courses.service;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 
 import com.project.courses.model.User;
@@ -16,9 +17,9 @@ public interface UserService {
 
 	Boolean deleteUserById(Long id);
 
-	User updateUserPhotoById(Long id, byte[] photo);
+	User updateUserPhoto(User user, byte[] photo);
 
-	byte[] getPhotoById(Long id);
+	ByteArrayInputStream getPhotoByUserId(Long id);
 	
 	String encodeUserPassword(String password);
 	

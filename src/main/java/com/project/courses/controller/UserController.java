@@ -14,6 +14,7 @@ import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,20 +47,20 @@ public class UserController {
 	@GetMapping("/photo/{id}")
 	@ResponseBody
 	public void getPhotoById(@PathVariable Long id, HttpServletResponse response){		
-		byte[] photo = userService.getPhotoById(id);
+		ByteArrayInputStream photo = userService.getPhotoByUserId(id);
 		response.setContentType(MediaType.IMAGE_JPEG_VALUE);
 	    try {
-			StreamUtils.copy(new ByteArrayInputStream(photo), response.getOutputStream());
+			StreamUtils.copy(photo, response.getOutputStream());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	@PutMapping(value = "/photo/{id}", headers={"content-type=multipart/form-data"})
-	public ResponseEntity<User> updateUserPhoto(@PathVariable Long id, @RequestPart("photo") MultipartFile photo){
-		User user = new User();
+	@PutMapping(value = "/photo", headers={"content-type=multipart/form-data"})
+	public ResponseEntity<User> updateUserPhoto(@RequestPart("photo") MultipartFile photo){
+		User user = userService.getAutheticatedUser();
 		try {
-			user = userService.updateUserPhotoById(id, photo.getBytes());
+			user = userService.updateUserPhoto(user, photo.getBytes());
 		} catch (IOException e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(user);			

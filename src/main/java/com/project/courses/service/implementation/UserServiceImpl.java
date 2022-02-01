@@ -1,5 +1,6 @@
 package com.project.courses.service.implementation;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,23 +75,19 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User updateUserPhotoById(Long id, byte[] photo) {
-		User user = this.getById(id);
-		
+	public User updateUserPhoto(User user, byte[] photo) {
 		if (photo != null)
 			user.setPhoto(photo);
-		
 		user = userRepository.save(user);
-		
 		return user;
 	}
 
 	@Override
-	public byte[] getPhotoById(Long id) {
+	public ByteArrayInputStream getPhotoByUserId(Long id) {
 		User user = this.getById(id);  
 		if (user.getPhoto() == null)
 			throw new ResourceNotFoundException("Photo not found.");
-		return user.getPhoto();		
+		return new ByteArrayInputStream(user.getPhoto());		
 	}
 
 	@Override
@@ -112,4 +109,5 @@ public class UserServiceImpl implements UserService {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return ((MyUserDetails)principal).getUser();
 	}
+
 }
