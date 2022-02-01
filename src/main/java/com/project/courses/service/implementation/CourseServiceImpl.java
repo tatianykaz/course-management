@@ -7,14 +7,20 @@ import org.springframework.stereotype.Service;
 
 import com.project.courses.exceptions.ResourceNotFoundException;
 import com.project.courses.model.Course;
+import com.project.courses.model.Student;
+import com.project.courses.model.User;
 import com.project.courses.repository.CourseRepository;
 import com.project.courses.service.CourseService;
+import com.project.courses.service.StudentService;
 
 @Service
 public class CourseServiceImpl implements CourseService {
 
 	@Autowired
 	private CourseRepository courseRepository;
+	
+	@Autowired
+	private StudentService studentService;
 	
 	@Override
 	public List<Course> getCourses() {
@@ -59,6 +65,20 @@ public class CourseServiceImpl implements CourseService {
 			return false;
 		
 		return true;
+	}
+
+	@Override
+	public Boolean enrollStudent(Long idCourse, User user) {
+		Course course = this.getById(idCourse);
+		
+		if (course != null) {
+			Student student = studentService.getByUser(user);		
+			course.addStudent(student);
+			this.saveCourse(course);
+			return true;
+		}
+		
+		return false;
 	}
 
 }

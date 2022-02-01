@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.courses.model.Course;
+import com.project.courses.model.User;
 import com.project.courses.service.CourseService;
+import com.project.courses.service.UserService;
 
 @RestController
 @RequestMapping("/courses")
@@ -24,10 +26,18 @@ public class CourseController {
 	@Autowired
 	private CourseService courseService;
 	
+	@Autowired
+	private UserService userService;
+	
 	@GetMapping("/all")
 	public ResponseEntity<List<Course>> getCourses(){
 		List<Course> courses = courseService.getCourses();
 		return ResponseEntity.status(HttpStatus.OK).body(courses);
+	}
+	
+	@GetMapping("{id}")
+	public ResponseEntity<Course> getCourseById(@PathVariable Long id){
+		return ResponseEntity.status(HttpStatus.OK).body(courseService.getById(id));
 	}
 	
 	@PostMapping("/new")
@@ -36,9 +46,11 @@ public class CourseController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(course);
 	}
 	
-	@GetMapping("{id}")
-	public ResponseEntity<Course> getCourseById(@PathVariable Long id){
-		return ResponseEntity.status(HttpStatus.OK).body(courseService.getById(id));
+	@PostMapping("/enroll/{id}")
+	public ResponseEntity<Boolean> enroll(@PathVariable Long id){
+		User user = userService.getAutheticatedUser();	
+		Boolean enrolled = courseService.enrollStudent(id, user);
+		return ResponseEntity.status(HttpStatus.OK).body(enrolled);
 	}
 	
 	@PutMapping("/{id}")

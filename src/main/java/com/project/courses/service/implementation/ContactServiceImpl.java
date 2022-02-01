@@ -7,10 +7,11 @@ import org.springframework.stereotype.Service;
 
 import com.project.courses.exceptions.ResourceNotFoundException;
 import com.project.courses.model.Contact;
+import com.project.courses.model.Student;
 import com.project.courses.model.User;
 import com.project.courses.repository.ContactRepository;
 import com.project.courses.service.ContactService;
-import com.project.courses.service.UserService;
+import com.project.courses.service.StudentService;
 
 @Service
 public class ContactServiceImpl implements ContactService{
@@ -19,7 +20,7 @@ public class ContactServiceImpl implements ContactService{
 	private ContactRepository contactRepository;
 	
 	@Autowired
-	private UserService userService;
+	private StudentService studentService;
 	
 	@Override
 	public List<Contact> getContacts() {
@@ -31,6 +32,15 @@ public class ContactServiceImpl implements ContactService{
 	public Contact saveContact(Contact contact) {
 		return contactRepository.save(contact);
 	}
+	
+	@Override
+	public Contact saveContact(Contact contact, User user) {
+		if (contact.getId() == null) {
+			Student student = studentService.getByUser(user);
+			contact.setStudent(student);
+		}
+		return contactRepository.save(contact);
+	}
 
 	@Override
 	public Contact getById(Long id) {
@@ -40,9 +50,9 @@ public class ContactServiceImpl implements ContactService{
 	}
 
 	@Override
-	public List<Contact> getByUserId(Long userId) {
-		User user = userService.getById(userId);
-		List<Contact> contact = contactRepository.findByUser(user);
+	public List<Contact> getByStudentId(Long studentId) {
+		Student student = studentService.getById(studentId);
+		List<Contact> contact = contactRepository.findByStudent(student);
 		return contact;
 	}
 

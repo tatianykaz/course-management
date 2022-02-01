@@ -7,10 +7,11 @@ import org.springframework.stereotype.Service;
 
 import com.project.courses.exceptions.ResourceNotFoundException;
 import com.project.courses.model.Feedback;
+import com.project.courses.model.Student;
 import com.project.courses.model.User;
 import com.project.courses.repository.FeedbackRepository;
 import com.project.courses.service.FeedbackService;
-import com.project.courses.service.UserService;
+import com.project.courses.service.StudentService;
 
 @Service
 public class FeedbackServiceImpl implements FeedbackService {
@@ -19,7 +20,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 	private FeedbackRepository feedbackRepository;
 	
 	@Autowired
-	private UserService userService;
+	private StudentService studentService;
 
 	@Override
 	public List<Feedback> getFeedbacks() {
@@ -27,6 +28,15 @@ public class FeedbackServiceImpl implements FeedbackService {
 		return feedbacks;
 	}
 
+	@Override
+	public Feedback saveFeedback(Feedback feedback, User user) {
+		if (feedback.getId() == null) {
+			Student student = studentService.getByUser(user);
+			feedback.setStudent(student);
+		}
+		return feedbackRepository.save(feedback);
+	}
+	
 	@Override
 	public Feedback saveFeedback(Feedback feedback) {
 		return feedbackRepository.save(feedback);
@@ -40,9 +50,9 @@ public class FeedbackServiceImpl implements FeedbackService {
 	}
 
 	@Override
-	public List<Feedback> getByUserId(Long userId) {
-		User user = userService.getById(userId);
-		List<Feedback> feedbacks = feedbackRepository.findByUser(user);
+	public List<Feedback> getByStudentId(Long studentId) {
+		Student student = studentService.getById(studentId);
+		List<Feedback> feedbacks = feedbackRepository.findByStudent(student);
 		return feedbacks;
 	}
 
@@ -72,5 +82,4 @@ public class FeedbackServiceImpl implements FeedbackService {
 		
 		return true;
 	}
-
 }

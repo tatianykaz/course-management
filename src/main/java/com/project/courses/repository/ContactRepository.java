@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.project.courses.model.Contact;
-import com.project.courses.model.User;
+import com.project.courses.model.Student;
 
 public interface ContactRepository extends JpaRepository<Contact, Long>  {
 
-	public List<Contact> findByUser(User user);
+	public List<Contact> findByStudent(Student student);
 }

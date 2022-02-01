@@ -42,7 +42,11 @@ public class MyUserDetails implements UserDetails {
 
 	@Override
 	public String getUsername() {
-		return user.getName();
+		return user.getLogin();
+	}
+	
+	public User getUser() {
+		return user;
 	}
 
 	@Override
