@@ -18,4 +18,6 @@ public interface CourseService {
 	Boolean deleteCourseById(Long id);
 
 	Boolean enrollStudent(Long idCourse, User user);
+
+	Boolean unsubscribeStudent(Long idCourse, User user);
 }

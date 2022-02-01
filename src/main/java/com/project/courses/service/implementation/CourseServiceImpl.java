@@ -81,4 +81,19 @@ public class CourseServiceImpl implements CourseService {
 		return false;
 	}
 
+	@Override
+	public Boolean unsubscribeStudent(Long idCourse, User user) {
+		Course course = this.getById(idCourse);
+		if (course != null) {
+			Student student = studentService.getByUser(user);	
+			if (course.getStudents().contains(student)) {
+				course.getStudents().remove(student);
+				this.saveCourse(course);
+				return true;
+			}
+		}
+		
+		return false;
+	}
+
 }

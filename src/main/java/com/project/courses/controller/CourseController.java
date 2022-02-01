@@ -53,6 +53,13 @@ public class CourseController {
 		return ResponseEntity.status(HttpStatus.OK).body(enrolled);
 	}
 	
+	@DeleteMapping("/enroll/{id}")
+	public ResponseEntity<Boolean> unsubscribe(@PathVariable Long id){
+		User user = userService.getAutheticatedUser();	
+		Boolean unsubscribed = courseService.unsubscribeStudent(id, user);
+		return ResponseEntity.status(HttpStatus.OK).body(unsubscribed);
+	}
+	
 	@PutMapping("/{id}")
 	public ResponseEntity<Course> updateCourse(@PathVariable Long id, @RequestBody Course updatedCourse){
 		updatedCourse = courseService.updateCourseById(id, updatedCourse);
